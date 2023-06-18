@@ -1,7 +1,7 @@
 # - name: Slides (revealjs)
 #   link: qmd/slides/SlidesSTA6507.html
 - name: Slides (PDF)
-  link: STA6856_Time_Series_Slides_AC.pdf
+  link: STA6246_DOE.pdf
 #- name: Course (Canvas)
 #  link: https://uwf.instructure.com/courses/39688
 - name: R Codes 
