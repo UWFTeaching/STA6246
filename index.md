@@ -1,5 +1,5 @@
 ---
-title: STA6856 - Design and Analysis of Experiment
+title: STA6246 - Design and Analysis of Experiment
 subtitle: acohen [@] uwf edu
 layout: page
 #callouts: home_callouts
