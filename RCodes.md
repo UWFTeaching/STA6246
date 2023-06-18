@@ -1,5 +1,5 @@
 ---
-title: STA6856 - Design and Analysis of Experiments
+title: STA6246 - Design and Analysis of Experiments
 subtitle: R Scripts
 layout: page
 #callouts: home_callouts
