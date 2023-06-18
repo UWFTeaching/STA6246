@@ -1,5 +1,5 @@
 ---
-title: STA6856 - Time Series Analysis
+title: STA6856 - Design and Analysis of Experiments
 subtitle: R Scripts
 layout: page
 #callouts: home_callouts
@@ -10,16 +10,9 @@ show_sidebar: false
 
 | **Topic** | **R Code**  |
 |:-----------------------|:---:|
-| - Introduction to R + Time Series   | [.html/.qmd](rcodes/TimeSeriesR.html) 
-| - Simple Zero Mean Models + ACF   | [.html/.qmd](rcodes/SimpleModels.html)
-| - AutoCorrelation Function   | [.html/.qmd](rcodes/ACFExamples.html)
-| - Template Assignments   | [.html/.qmd](rcodes/HW_template.html)
-| - Trend + Season Estimation and IID Testing   | [.html/.qmd](rcodes/TSDecomposition.html)
-| - ARMA(p,q) Modeling | [.html/.qmd](rcodes/ARMAModeling.html)
-| - ARMA(p,q) modeling group work | [.html/.qmd](rcodes/PracticeARMAModeling.html)
-| - ARIMA(p,d,q) modeling | [.html/.qmd](rcodes/ARIMAModeling.html)
-| - SARIMA(p,d,q)x(P,D,Q)s modeling | [.html/.qmd](rcodes/SARIMA.html)
-| - Forecasting | [.html/.qmd](rcodes/Forecasting.html)
-| - Regression with ARMA errors | [.html/.qmd](rcodes/RegARMA.html)
-| - GARCH models | [.html/.qmd](rcodes/GARCH.html)
-
+| - Introduction to R/Quarto   | [.html/.qmd](rcodes/) 
+| - ANOVA   | [.html/.qmd](rcodes/)
+| - Random ANOVA   | [.html/.qmd](rcodes/.html)
+| - LSD Examples   | [.html/.qmd](rcodes/.html)
+| - LSD + GLSD    | [.html/.qmd](rcodes/.html)
+| - Two Factorial Design | [.html/.qmd](rcodes/.html)
