@@ -11,9 +11,9 @@ show_sidebar: false
 
 | **Week** | **Day** | **Topic(s)** | **Resources** |
 |:-:|:---:|:--------------------|:--:|:-:|
-| 1    | T     | Intro to DOE| [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=10)|
+| 1    | T     | Intro to DOE| [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=1)|
 |      | TH    | Introduction to R/RStudio/Quarto | |
-| 2    | T     | ANOVA and Random ANOVA | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=26) |
+| 2    | T     | ANOVA and Random ANOVA | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=33) |
 |      | TH    | | |
 | 3    | T     | **Independenc Day (no class)** || 
 |      | TH    |   | | 
