@@ -1,2 +1,2 @@
-## Welcome to STA6856 Time Series Analysis!
+## Welcome to STA6246 Design and Analysis of Experiments
 
