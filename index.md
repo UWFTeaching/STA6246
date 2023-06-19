@@ -17,13 +17,13 @@ show_sidebar: false
 |      | TH    | Random Effects ANOVA | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=66) |
 | 3    | T     | **Independenc Day (no class)** || 
 |      | TH    | Randomized Complete Block Design  | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=77) | 
-| 4    | T     |  |  |
-|      | TH    |  | |
-| 5    | T     |  | | 
-|      |TH     |  |  | 
-| 6    | T     |  | |
-|      | TH    |   |  | 
-| 7    | T     |  | |
-|      | TH    |  | |
-| 8    | T     | |   |
+| 4    | T     | Latin Square Design |  |
+|      | TH    | Latin Square Design  | |
+| 5    | T     | G-L Square Design | | 
+|      |TH     | G-L Square Design |  | 
+| 6    | T     | Two Factorial Design | |
+|      | TH    | Fractionl Factorial Design  |  | 
+| 7    | T     | Multiple Factorial Design | |
+|      | TH    | Final Project | |
+| 8    | T     | -- |  |
 |      | TH    |  |  |
