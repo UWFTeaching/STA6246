@@ -10,6 +10,7 @@ show_sidebar: false
 
 | **Topic** | **R Code**  |
 |:-----------------------|:---:|
+| - R Practice Example  | [.html/.qmd](qmd/RPractice.html)
 | - ANOVA Example  | [.html/.qmd](qmd/ANOVA_Examples.html)
 | - Random ANOVA   | [.html/.qmd](rcodes/.html)
 | - LSD Examples   | [.html/.qmd](rcodes/.html)
