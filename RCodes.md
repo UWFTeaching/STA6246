@@ -10,8 +10,8 @@ show_sidebar: false
 
 | **Topic** | **R Code**  |
 |:-----------------------|:---:|
-| - Introduction to DOE   | [.html/.qmd](qmd/assignment1.html ) 
-| - ANOVA   | [.html/.qmd](rcodes/)
+| - ANOVA Example  | [.html/.qmd](qmd/ANOVA_
+Examples.html)
 | - Random ANOVA   | [.html/.qmd](rcodes/.html)
 | - LSD Examples   | [.html/.qmd](rcodes/.html)
 | - LSD + GLSD    | [.html/.qmd](rcodes/.html)
