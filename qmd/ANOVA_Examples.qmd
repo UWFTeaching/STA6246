@@ -1,0 +1,10 @@
+---
+title: "STA6246 - DOE"
+subtitle: "ANOVA Examples"
+author: "Dr. Cohen "
+format: html
+editor: visual
+self-contained: true
+---
+
+## Etching Process Experiment

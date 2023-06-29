@@ -1,0 +1,30 @@
+---
+title: "STA6246 - DOE"
+subtitle: "Assignment 1"
+author: "Student Name"
+format: html
+editor: visual
+self-contained: true
+---
+
+## Introduction to DOE
+
+1.  Why is randomization important in an experiment? Give an example.
+
+2.  Why is blocking important in an experiment? Give an example.
+
+3.  Why is replication important in an experiment? Give an example.
+
+4.  Imagine a question of interest to you. State the problem, the response variable, and the factors.
+
+5.  An article appeared in The Wall Street Journal on Tuesday, April 27, 2010, with the title "Eating Chocolate Is Linked to Depression." The article reported on a study funded by the National Heart, Lung and Blood Institute (part of the National Institutes of Health) and conducted by the faculty at the University of California, San Diego, and the University of California, Davis. The research was also published in the Archives of Internal Medicine (2010, pp. 699-703). The study examined 931 adults who were not taking antidepressants and did not have known cardiovascular disease or diabetes. The group was about 70% men and the average age of the group was reported to be about 58. The participants were asked about chocolate consumption and then screened for depression using a questionnaire. People who scored less than 16 on the questionnaire are not considered depressed, while those with scores above 16 and less than or equal to 22 are considered possibly depressed, while those with scores above 22 are considered likely to be depressed. The survey found that people who were not depressed ate an average of 8.4 servings of chocolate per month, while those individuals who scored above 22 were likely to be depressed ate the most chocolate, an average of 11.8 servings per month. No differentiation was made between dark and milk chocolate. Other foods were also examined, but no patterned emerged between other foods and depression.
+
+    5.1 Is this study a designed experiment?
+
+    5.2 Does it establish a cause-and-effect link between chocolate consumption and depression?
+
+    5.3 How would the study have to be conducted to establish such a link?
+
+6.  In a single-factor ANOVA with a levels, show that the Total Sum of Squares $SS_T$ can be decomposed to two other sum of squares.
+
+7.  Explain the intuition on how the analysis of variance allows the testing of the equality of the averages.
