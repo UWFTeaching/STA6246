@@ -5,6 +5,195 @@ author: "Dr. Cohen "
 format: html
 editor: visual
 self-contained: true
+execute: 
+  warning: false
+  message: false
 ---
 
 ## Etching Process Experiment
+
+The goal of this experiment is to compare 4 Radio Frequency (RF) power to obtain the desired etching rate.
+
+### Data description
+
+```{r}
+library(tidyverse)
+library(gtsummary)
+# enter ER
+Etch_Rate=c(575,542,530,539,570,565,593,590,579,610,600,651,610,637,629,725,700,715,685,710)
+# enter RF
+RF=gl(n = 4, k = 5, labels = c("160","180","200","220"))
+# put together data in a tibble
+etch_exp=tibble(Etch_Rate,RF)
+
+etch_exp %>%
+  ggplot(aes(x=RF,y=Etch_Rate)) +
+  geom_point()+
+  theme_bw()+
+  labs(x="Radio Frequency Power (W)",
+       y="Etch Rate (unit)")
+
+
+etch_exp %>%
+  tbl_summary(by=RF)
+```
+
+-   The etching rate seems to increase with the RF power.
+
+-   The variability seems to be similar among the groups (powers)
+
+### ANOVA in R
+
+##### Fitting
+
+```{r}
+library(sjPlot)
+
+# ANOVA one factor
+results = aov(Etch_Rate ~ RF,data = etch_exp)
+summary(results)
+tab_model(results)
+
+# Individual CIs - need to add the CI for the reference level
+confint(results)
+```
+
+The ANOVA was rejected (p-value $< 0.001$). Therefore, the data is compatible with the means difference in the population. Next, we will diagnose the model.
+
+##### Model Adequacy
+
+```{r}
+par(mfrow=c(2,2))
+plot(results)
+
+```
+
+The residuals plots do not show any major departures from the ANOVA assumptions.
+
+##### Multiple Comparison
+
+Considering 5% level of significance.
+
+```{r}
+
+# Multiple Comparison
+pairwise.t.test(Etch_Rate,RF,p.adjust.method = "bonferroni")
+
+#Tukey Test 
+THSD=TukeyHSD(results)
+plot(THSD,las=1)
+
+# Fisher LSD Test
+library(agricolae)
+L=LSD.test(results,"RF",console=TRUE,group = F)
+```
+
+**Conclusion**:
+
+The Radio Frequency Power setting does affect the etching rate in the etching process. The higher the RF power the higher the etch rate.
+
+## Peak Discharge Data
+
+An Engineer is interested in determining whether **4 different methods** of estimating flood flow frequency produce equivalent estimates of **peak discharge** when applied to the same watershed. **Six** replications were run. Therefore. we have 6\*4= **24 runs.**
+
+```{r}
+pd=c(0.34,0.12,1.23,0.7,1.75,0.12,0.91,2.94,2.14,2.36,2.86,4.55,6.31,8.37,9.75,6.09,9.82,7.24,17.15,11.82,10.95,17.20,14.35,16.82)
+
+methods=gl(n = 4, k = 6, length = 24, labels = c("a","b","c","d"))
+
+peak_discharge_exp = tibble(pd,methods)
+```
+
+### Data description
+
+```{r}
+
+peak_discharge_exp %>%
+  ggplot(aes(x=methods,y=pd)) +
+  geom_point()+
+  theme_bw()+
+  labs(x="Methods",
+       y="Peak Discharge")
+
+
+peak_discharge_exp %>%
+  tbl_summary(by=methods,
+              statistic = list(pd ~ "{mean} ({sd}); [{min}, {max}]") )
+
+```
+
+-   The Method "a" yields to the higher peak discharge values compared to other methods
+
+-   The variability seems to be a bit differnet among the groups (methods)
+
+### ANOVA in R
+
+##### Fitting
+
+```{r}
+library(sjPlot)
+
+# ANOVA one factor
+results = aov(pd ~ methods,data = peak_discharge_exp)
+summary(results)
+tab_model(results)
+
+# Individual CIs - need to add the CI for the reference level
+confint(results)
+```
+
+The ANOVA was rejected (p-value $< 0.001$). Therefore, the data is compatible with the means difference in the population. Next, we will diagnose the model.
+
+##### Model Adequacy
+
+```{r}
+par(mfrow=c(2,2))
+plot(results)
+
+```
+
+The residuals plots do not show any major departures from the ANOVA assumptions, except the variance constant assumption.
+
+#####  Cox-Box Transformation for stabilizing variance  
+
+```{r}
+library(car)
+PT=powerTransform(results)
+
+peak_discharge_exp = peak_discharge_exp %>%
+  mutate(pdT= 2*(sqrt(pd)-1)) 
+
+
+# ANOVA one factor
+resultsT = aov(pdT ~ methods,data = peak_discharge_exp)
+summary(resultsT)
+tab_model(resultsT,results)
+
+# residuals plots
+par(mfrow=c(2,2))
+plot(resultsT)
+```
+
+The p-value \<0.001 so the ANOVA null hypothesis is rejected. Data supports evidence of peak discharge mean difference among the methods.
+
+##### Multiple Comparison
+
+Considering 5% level of significance.
+
+```{r}
+
+# Multiple Comparison
+pairwise.t.test(pd,methods,p.adjust.method = "bonferroni")
+
+#Tukey Test 
+THSD=TukeyHSD(results)
+plot(THSD,las=1)
+
+# Fisher LSD Test
+library(agricolae)
+L=LSD.test(results,"methods",console=TRUE,group = F)
+```
+
+**Conclusion**:
+
+The Methods do affect the peak discharge values. The method "d" provides the highest peak discharge. Also, methods "a" and "b" seems to result in similar mean peak difference (p=0.266; 95%CI -0.93 to 4.76 using Tukey's test).
