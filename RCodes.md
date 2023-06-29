@@ -10,8 +10,7 @@ show_sidebar: false
 
 | **Topic** | **R Code**  |
 |:-----------------------|:---:|
-| - ANOVA Example  | [.html/.qmd](qmd/ANOVA_
-Examples.html)
+| - ANOVA Example  | [.html/.qmd](qmd/ANOVA_Examples.html)
 | - Random ANOVA   | [.html/.qmd](rcodes/.html)
 | - LSD Examples   | [.html/.qmd](rcodes/.html)
 | - LSD + GLSD    | [.html/.qmd](rcodes/.html)
