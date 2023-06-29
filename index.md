@@ -14,10 +14,10 @@ show_sidebar: false
 | 1    | T     | Intro to DOE| [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=1)|
 |      | TH    | Introduction to R/RStudio/Quarto | |
 | 2    | T     | ANOVA | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=32) |
+|      | TH    | ANOVA Examples in R | [R Code](qmd/ANOVA_Examples.html) |
+| 3    | T     | **Independence Day (no class)** |
 |      | TH    | Random Effects ANOVA | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=66) |
-| 3    | T     | **Independenc Day (no class)** || 
-|      | TH    | Randomized Complete Block Design  | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=77) | 
-| 4    | T     | Latin Square Design |  |
+| 4    | T     | Randomized Complete Block Design  | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=77) | 
 |      | TH    | Latin Square Design  | |
 | 5    | T     | G-L Square Design | | 
 |      |TH     | G-L Square Design |  | 
