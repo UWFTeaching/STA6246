@@ -8,6 +8,7 @@ self-contained: true
 execute: 
   warning: false
   message: false
+toc: true
 ---
 
 ## Etching Process Experiment
@@ -154,7 +155,7 @@ plot(results)
 
 The residuals plots do not show any major departures from the ANOVA assumptions, except the variance constant assumption.
 
-#####  Cox-Box Transformation for stabilizing variance  
+##### Cox-Box Transformation for stabilizing variance
 
 ```{r}
 library(car)
@@ -197,3 +198,133 @@ L=LSD.test(results,"methods",console=TRUE,group = F)
 **Conclusion**:
 
 The Methods do affect the peak discharge values. The method "d" provides the highest peak discharge. Also, methods "a" and "b" seems to result in similar mean peak difference (p=0.266; 95%CI -0.93 to 4.76 using Tukey's test).
+
+## Fabric Strength and Looms - Random ANOVA
+
+A textile company weaves a fabric on a large number of looms.
+
+The engineer suspects that in addition to the usual variation in **strength** within the samples of the same loom, there may be significant variations in strength between looms.
+
+The engineer selected **a=4** looms at random and **n=4** replicates.
+
+#### Data description
+
+```{r}
+strength=c(98,97,99,96,91,90,93,92,96,95,97,95,95,96,99,98)
+looms=gl(n = 4, k = 4, labels = c("lm1","lm2","lm3","lm4"))
+
+strength_loom = tibble(strength,looms)
+
+strength_loom %>%
+  ggplot(aes(x=looms,y=strength)) +
+  geom_boxplot()+
+  theme_bw()+
+  labs(x="Looms",
+       y="Strength")
+```
+
+#### ANOVA - To test the variance component hypothesis
+
+```{r}
+# to calculate the mean squares
+aRE=aov(strength ~ looms, data = strength_loom)
+summary(aRE)
+confint(aRE)
+par(mfrow=c(2,2))
+plot(aRE)
+```
+
+The results from ANOVA indicates significant difference in the variability due to in the looms. We want to estimate variance components:
+
+##### Moments Method
+
+```{r}
+# Estimate the variance components - method of moments
+summary(aRE)
+s2= 1.9
+s2tau= (29.729 - 1.896)/4
+s2y = s2 + s2tau
+ICC = s2tau/s2y
+
+```
+
+##### MLE method
+
+```{r}
+library(lme4)
+# Fit the Random Effect One-way ANOVA
+anovaRE <- lmer(strength ~ 1 + (1 | looms))
+summary(anovaRE)
+# Confidence Intervals Variance Components and Overall Mean
+confint(anovaRE,oldNames=FALSE)
+# Estimates the random effect tau_i 
+ranef(anovaRE)
+# Check the residuals
+par(mfrow = c(1, 2))
+plot(anovaRE)
+
+#ICC
+library(irr)
+t(matrix(strength, nrow =  4))
+icc(t(matrix(strength, nrow =  4)))
+```
+
+> The **conclusion**: The strength variability is significantly different from loom to loom (p \<0.001). The variance component are:
+>
+> -   The variance due to the looms is 6.958
+>
+> -   The variance of the error: 1.896
+>
+> -   The ICC is 0.786 (95% CI \[0.39 to 0.98\])
+>
+> We can conclude that the 78.6% of variability in the strength is due to the difference among the looms.
+
+## Cardiovascular and Chocolate Study
+
+The goal is to investigate the effect of consuming chocolate on cardiovascular health (Plasma Antioxidants from Chocolate, Nature, 2003). 3 types of chocolates:
+
+-   100 g of dark chocolate : DC
+
+-   100 g of dark chocolate with 200mL of full fat milk: DCMK
+
+-   200 g of milk chocolate: MK
+
+12 subjects. The total antioxidant capacity of their blood plasma was measured after 1 hour of consumption of one of the above level.
+
+```{r}
+DC    =c(118.8 ,	122.6 ,	115.6 ,	113.6 ,	119.5 ,	115.9 ,	115.8 ,	115.1 ,	116.9 ,	115.4 ,	115.6 ,	107.9)
+
+DCMK  =c(105.4 ,	101.1 ,	102.7 , 97.1, 	101.9 ,98.9 ,	100.0,99.8,102.6,100.9,104.5,93.5)
+
+MC    =c(102.1 ,	105.8 ,	99.6  ,	102.7 ,98.8 ,	100.9 ,	102.8 ,98.7 ,94.7 ,97.8 ,99.7 ,98.6)
+
+subjects = gl(n=12,k=1,length = 36,labels = (1:12))
+
+cardio_chocolate = tibble(DC,DCMK,MC) %>%
+  pivot_longer(cols = everything(),
+               names_to = "group",
+               values_to = "antioxidantCap") %>%
+  mutate(subjects = gl(n=12,k=3,length = 36,labels = (1:12))
+)
+
+```
+
+```{r}
+cardio_chocolate %>%
+  ggplot(aes(x=group,y=antioxidantCap))+
+  geom_boxplot()+
+  theme_bw()
+
+
+res = aov(antioxidantCap~group+subjects,data=cardio_chocolate)
+summary(res)
+
+# variance components
+library(lme4)
+anovaRE <- lmer(antioxidantCap ~ group + (1 | subjects), data = cardio_chocolate)
+summary(anovaRE)
+
+# Confidence Intervals Variance Components and Overall Mean
+confint(anovaRE,oldNames=FALSE)
+
+```
