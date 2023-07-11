@@ -1,0 +1,115 @@
+---
+title: "STA6246 - DOE"
+subtitle: "RCBD - ANOVA Examples"
+author: "Dr. Cohen "
+format: html
+editor: visual
+self-contained: true
+execute: 
+  warning: false
+  message: false
+toc: true
+---
+
+## Vascular Graft Experiment
+
+A medical manufacturer wants to investigate **a=4** different levels of **extrusion pressure** on flicks (defects) by using randomized complete block design.
+
+The experimenter considers the batches of resin (raw material) as **blocks** **b=6**.
+
+**N= 24** runs or observations.
+
+### Data description
+
+```{r}
+library(tidyverse)
+library(gtsummary)
+# enter ER
+dataV=read.csv(file = "../datasets/VascularData.csv",row.names = 1)
+dataV$Press=factor(dataV$Press, labels=c("8500","8700","8900","9100"))
+dataV$Batch=as.factor(dataV$Batch)
+
+
+dataV %>%
+  ggplot(aes(x=Press,y=Yield)) +
+  geom_point()+
+  theme_bw()+
+  labs(x="Extrusion pressure (PSI)",
+       y="Yiled (%)")
+
+
+dataV %>%
+  tbl_summary(by=Press)
+```
+
+-   The yield seems to decrease with the extrusion pressure.
+
+-   The variability seems to be similar among the groups (extrusion pressure)
+
+### ANOVA in R
+
+##### Fitting
+
+```{r}
+library(sjPlot)
+
+# ANOVA one factor and one blocking factor
+results = aov(Yield ~ Press + Batch ,data = dataV)
+summary(results)
+```
+
+```{tab_model(results)}
+
+# Individual CIs - need to add the CI for the reference level
+confint(results)
+```
+
+The ANOVA was rejected (p-value $= 0.0019$). Therefore, the data is compatible with the means difference in the yields population among the 4 extrusion pressures. Next, we will diagnose the model.
+
+##### Model Adequacy
+
+```{r}
+par(mfrow=c(2,2))
+plot(results)
+
+```
+
+We could consider a transformation because the Scale-Location plots is showing a trend.
+
+##### Multiple Comparison
+
+Considering 5% level of significance.
+
+```{r}
+
+#Tukey Test 
+THSD=TukeyHSD(results,which = "Press")
+plot(THSD,las=1)
+
+# Fisher LSD Test
+library(agricolae)
+L=LSD.test(results,"Press",console=TRUE,group = F)
+```
+
+**Conclusion**:
+
+The Extrusion Pressure setting does affect the Yield (defects) in the Vascular Graft Experiment. The Lower the Pressure the higher the Yield.
+
+The 9100 pressure was significantly different from 8500 and 8700 pressures. However, the 9100 pressure statistically resulted in no difference in the yield compared to 8900 pressure.
+
+#### Random Effects RCBD
+
+```{r}
+library(lme4)
+anovaRE <- lmer(Yield ~ 1 + Press + (1 | Batch), data = dataV)
+summary(anovaRE)
+# Confidence Intervals Variance Components and Overall Mean
+confint(anovaRE,oldNames=FALSE)
+# Estimates the random effect
+ranef(anovaRE)
+anova(anovaRE)
+icc = 7.781/(7.781+7.326)
+icc
+```
+
+There is a significant effect of the variability coming from the batch to batch.
