@@ -18,7 +18,7 @@ show_sidebar: false
 | 3    | T     | **Independence Day (no class)** |
 |      | TH    | Random Effects ANOVA | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=66) |
 | 4    | T     | Randomized Complete Block Design  | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=77) | 
-|      | TH    | Latin Square Design  | |
+|      | TH    | Latin Square Design  |[R Code](qmd/LSD_Examples.html) |
 | 5    | T     | G-L Square Design | | 
 |      |TH     | G-L Square Design |  | 
 | 6    | T     | Two Factorial Design | |

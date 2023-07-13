@@ -1,0 +1,87 @@
+---
+title: "STA6246 - DOE"
+subtitle: "Assignment 2"
+author: "Student Name"
+format: html
+editor: visual
+self-contained: true
+---
+
+## Problem 1
+
+A product developer is investigating the **tensile strength** of a new synthetic fiber that will be used to make cloth for men's shirts. Strength is usually affected by **the percentage of cotton** used in the blend of materials for the fiber. The engineer conducts a completely randomized experiment with five levels of cotton content and replicates the experiment five times. The data are shown in the following table.
+
+```{=html}
+<pre>
+Cotton Weight Percent             Observations
+15                                7 7 15 11 9
+20                                12 17 12 18 18
+25                                14 19 19 18 18
+30                                19 25 22 19 23
+35                                7 10 11 15 11
+</pre>
+```
+1.  Enter the data in R so it is appropriately used to run ANOVA.
+
+```{r}
+# code here
+
+```
+
+2.  Is there evidence to support the claim that cotton content affects the mean tensile strength? Use α = 0.05.
+    -   State the Hypotheses:
+
+    -   Provide the ANOVA Table:
+
+```{r}
+# code here
+```
+
+3.  Use the Fisher LSD method to make comparisons between the pairs of means. What conclusions can you draw?
+
+```{r}
+# code here
+```
+
+4.  Analyze the residuals from this experiment and comment on model adequacy.
+
+```{r}
+# code here
+```
+
+## Problem 2
+
+A manufacturer suspects that the batches of raw material furnished by his supplier differ significantly in calcium content. There are a large number of batches currently in the warehouse. Five of these are randomly selected for study. A chemist makes five determinations on each batch and obtains the following data:
+
+![](images/batches.png){width="440"}
+
+1.  Enter the data in R so it is appropriately used to run ANOVA.
+
+```{r}
+# code here
+
+```
+
+2.  Is this a random effects model? Why?
+3.  Is there significant variation in calcium content from batch to batch? Use α = 0.05.
+    -   State the Hypotheses.
+
+    -   Provide the ANOVA Table.
+
+```{r}
+# code here
+```
+
+4.  Estimate the variance components for this model: $\sigma_\tau^2$ and $\sigma^2$.
+
+```{r}
+# code here
+```
+
+3.  Find a 95% Confidence Interval for ICC $\sigma_\tau^2/(\sigma_\tau^2 + \sigma^2)$ and give an **interpretation** of the ICC.
+
+```{r}
+# code here
+```
+
+\

@@ -58,6 +58,8 @@ results = aov(Yield ~ Press + Batch ,data = dataV)
 summary(results)
 ```
 
+
+
 ```{tab_model(results)}
 
 # Individual CIs - need to add the CI for the reference level
