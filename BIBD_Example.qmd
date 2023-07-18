@@ -1,0 +1,192 @@
+---
+title: "Balanced Incomplete Block Design"
+subtitle: "STA6246"
+author: "Dr. Cohen "
+format: html
+editor: visual
+self-contained: true
+execute: 
+  warning: false
+  message: false
+toc: true
+---
+
+## Introduction
+
+These designs are known as randomized incomplete block designs:
+
+-   In certain experiments using randomized block designs, we may not be able to run all the treatment combinations in each block.
+-   Situations like this usually occur because of shortages of experimental apparatus or facilities or the physical size of the block.
+-   For example, in the vascular graft experiment (Example 4.1), suppose that each batch of material is only large enough to accommodate testing three extrusion pressures. Therefore, each pressure cannot be tested in each batch.
+-   **When all treatment comparisons are equally important,** the treatment combinations used in each block should be selected in a balanced manner, so that any pair of treatments occur together the same number of times as any other pair. This is a balanced incomplete block design (BIBD).
+
+## Reaction Time with 4 Catalysts
+
+-   An experimenter wanted to study the effects of 5 different formulations of a rocket propellant on the observed **burning rate**.
+
+-   Each formulation is mixed from a **batch** of raw material.
+
+-   Each formulation is prepared by one **operator** for each batch.
+
+-   Each formulation ca be assembly tested using 5 different **tests**.
+
+-   $p=5$ levels for each factor
+
+$p^2= 25$ runs or observations.
+
+### Data description
+
+```{r}
+library(tidyverse)
+library(gtsummary)
+
+# BIBD EXAMPLE: 
+TimeR=c(73,74,NA,71,NA,75,67,72,73,75,68,NA,75,NA,72,75)
+Catalyst= gl(n = 4,k=4,labels = c(1:4))
+Batch= gl(n = 4,k=1,length = 16,c(1:4))
+
+mydata <- data.frame(TimeR, Catalyst, Batch)
+
+m=mydata[complete.cases(mydata), ]
+summary(aov(TimeR ~ Batch+Catalyst, data = mydata))
+
+
+library(ibd)
+
+des.bibd = bibd(v = 4, b =  4, r = 3, k = 3, lambda = 2) 
+## v: number of treatments
+## b: number of blocks
+## k: number of units per block
+## r: number of replications
+##
+des.bibd$design
+
+## Test if the Design is BIBD
+library(crossdes)
+tab <- xtabs(TimeR~ Catalyst+Batch, data = mydata)
+d <- t(apply(tab,1, function(x) (1:4)[x != 0]))
+isGYD(d)
+
+aov.ibd(TimeR ~ Batch+Catalyst, data = mydata)
+
+
+fit <- aov(TimeR ~ Batch + Catalyst , data = mydata)
+drop1(fit, test = "F")
+
+
+
+
+
+
+
+
+
+rocket=tibble(BurnRate,Bt,Op,Trts,Tests)
+
+rocket %>%
+  ggplot(aes(x=Trts,y=BurnRate,group=Trts)) +
+  geom_point()+
+  stat_summary(aes(group=1),fun = mean, geom = "line", col="red",linewidth=2)+
+  stat_summary(aes(label=..y..,group=1),fun = mean, geom = "text", col="blue",size=10)+
+  theme_bw()+
+  labs(x="Formualtions",
+       y="Burn Rate")
+
+rocket %>% 
+  select(BurnRate,Trts) %>%
+  tbl_summary(by=Trts,
+              statistic = list(all_continuous() ~ "{mean} ({sd})"))
+```
+
+-   The mean burning rate seems to vary acrross the formulations.
+
+-   The variability seems to vary a bit across the formulations
+
+-   The Formulation D provides the highest mean burning rate and B the lowest.
+
+### ANOVA in R
+
+##### Fitting
+
+```{r}
+library(sjPlot)
+
+# ANOVA one factor and one blocking factor
+results = aov(BurnRate ~ Trts + Bt + Op + Tests ,data = rocket)
+summary(results)
+tab_model(results)
+```
+
+```{r}
+
+# Individual CIs 
+confint(results)
+```
+
+The ANOVA was rejected (p-value $= 0.007$). Therefore, the data is compatible with the means difference in the burn rate across the 5 formulations. Next, we will diagnose the model.
+
+##### Model Adequacy
+
+```{r}
+par(mfrow=c(2,2))
+plot(results)
+```
+
+We could consider a transformation because the Scale-Location plots is showing a trend.
+
+##### Transformation
+
+```{r}
+library(car)
+l=powerTransform(results)
+l$roundlam
+```
+
+Since $\lambda$ was estimated to be $0$ no need to a transformation.
+
+##### Multiple Comparison
+
+Considering 5% level of significance.
+
+```{r}
+
+#Tukey Test 
+THSD=TukeyHSD(results,which = "Trts")
+plot(THSD,las=1)
+THSD
+# Fisher LSD Test
+library(agricolae)
+L=LSD.test(results,"Trts",console=TRUE,group = F)
+```
+
+**Conclusion**:
+
+-   Tukey's Test indicates:
+
+    -   Significant differences between:
+
+        -   B and D;
+
+        -   A and B; and
+
+        -   C and D.
+
+-   Fisher LSD Test indicates:
+
+    -   Significant differences between:
+
+        -   B and **D**;
+
+        -   A and B;
+
+        -   C and **D**;
+
+        -   B and E;
+
+        -   A and C.
+
+Formulation D led to the highest mean burning rate and it is statistical significant different from formations B and C.
+
+Formulation D, A, and E resulted in no significant differences.
+
+#### 

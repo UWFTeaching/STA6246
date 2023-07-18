@@ -101,7 +101,7 @@ plot(results)
 
 We could consider a transformation because the Scale-Location plots is showing a trend.
 
-##### Transformation 
+##### Transformation
 
 ```{r}
 library(car)

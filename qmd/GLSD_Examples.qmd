@@ -1,0 +1,186 @@
+---
+title: "Graeco-Latin Square Design"
+subtitle: "STA6246"
+author: "Dr. Cohen "
+format: html
+editor: visual
+self-contained: true
+execute: 
+  warning: false
+  message: false
+toc: true
+---
+
+## Introduction
+
+-   The Graeco-Latin Square Design (GLSD) allows us to eliminate **three** nuisance factors (blocking).
+
+-   Each factor has p levels
+
+-   We can control the effect of these blocking factors by grouping the experimental units into blocks.
+
+-   This is an extension of the Latin Square Design.
+
+## Rocket Propellant Experiment
+
+-   An experimenter wanted to study the effects of 5 different formulations of a rocket propellant on the observed **burning rate**.
+
+-   Each formulation is mixed from a **batch** of raw material.
+
+-   Each formulation is prepared by one **operator** for each batch.
+
+-   Each formulation can be assembly tested using 5 different **tests**.
+
+-   $p=5$ levels for each factor
+
+$p^2= 25$ runs or observations.
+
+### Data description
+
+```{r}
+library(tidyverse)
+library(gtsummary)
+# enter ER
+BurnRate=c(24,17,18,26,22,20,24,38,31,30,19,30,26,26,20,24,27,27,23,29,24,36,21,22,31)
+Bt=gl(n = 5, k = 1,length = 25, labels = c(1:5))
+Op=gl(n = 5, k = 5,length = 25, labels = c(1:5))
+Trts=c("A","B","C","D","E",
+       "B","C","D","E","A",
+       "C","D","E","A","B",
+       "D","E","A","B","C",
+       "E","A","B","C","D")
+
+# ADDITIONAL FACTOR - THAT IS THE TEST ASSEMBLIES
+Tests=c("Aa","Ba","Ca","Da","Ea",
+        "Da","Ea","Aa","Ba","Ca",
+        "Ba","Ca","Da","Ea","Aa",
+        "Ea","Aa","Ba","Ca","Da",
+        "Ca","Da","Ea","Aa","Ba")
+
+rocket=tibble(BurnRate,Bt,Op,Trts,Tests)
+
+head(rocket)
+
+rocket %>%
+  ggplot(aes(x=Trts,y=BurnRate,group=Trts)) +
+  geom_point()+
+  stat_summary(aes(group=1),
+               fun = mean, 
+               geom = "line", 
+               col="red",
+               linewidth=2)+
+  stat_summary(aes(label=..y..,group=1),
+               fun = mean, 
+               geom = "text", 
+               col="blue",
+               size=10)+
+  theme_bw()+
+  labs(x="Formualtions",
+       y="Burn Rate")
+
+rocket %>% 
+  select(BurnRate,Trts) %>%
+  tbl_summary(by=Trts,
+              statistic = list(all_continuous() ~ "{mean} ({sd})"))
+```
+
+-   The mean burning rate seems to vary acrross the formulations.
+
+-   The variability seems to vary a bit across the formulations
+
+-   The Formulation D provides the highest mean burning rate and B the lowest.
+
+### ANOVA in R
+
+##### Fitting
+
+```{r}
+library(sjPlot)
+
+# ANOVA one factor and one blocking factor
+results = aov(BurnRate ~ Trts + Bt + Op + Tests ,data = rocket)
+summary(results)
+tab_model(results)
+```
+
+```{r}
+
+# Individual CIs 
+confint(results)
+```
+
+The ANOVA was rejected (p-value $= 0.007$). Therefore, the data is compatible with the means difference in the burn rate across the 5 formulations. Next, we will diagnose the model.
+
+##### Model Adequacy
+
+```{r}
+par(mfrow=c(2,2))
+plot(results)
+```
+
+We could consider a transformation because the Scale-Location plots is showing a trend.
+
+##### Transformation
+
+Since $\lambda$ was estimated to be $0$ we need a $\log$ transformation.
+
+```{r}
+library(car)
+l=powerTransform(results)
+l$roundlam
+## do the transofrmation
+Tburn =log(BurnRate)
+## Refit ANOVA
+rano=aov(Tburn ~ Bt + Op + Trts + Tests, data=rocket)
+## Summary
+summary(rano)
+
+par(mfrow=c(2,2))
+plot(rano)
+```
+
+##### Multiple Comparison
+
+Considering 5% level of significance.
+
+```{r}
+#Tukey Test 
+THSD=TukeyHSD(results,which = "Trts")
+plot(THSD,las=1)
+THSD
+# Fisher LSD Test
+library(agricolae)
+L=LSD.test(results,"Trts",console=TRUE,group = F)
+```
+
+**Conclusion**:
+
+-   Tukey's Test indicates:
+
+    -   Significant differences between:
+
+        -   B and D;
+
+        -   A and B; and
+
+        -   C and D.
+
+-   Fisher LSD Test indicates:
+
+    -   Significant differences between:
+
+        -   B and **D**;
+
+        -   A and B;
+
+        -   C and **D**;
+
+        -   B and E;
+
+        -   A and C.
+
+Formulation D led to the highest mean burning rate and it is statistical significant different from formations B and C.
+
+Formulation D, A, and E resulted in no significant differences.
+
+#### 

@@ -14,5 +14,5 @@ show_sidebar: false
 | - ANOVA Example  | [.html/.qmd](qmd/ANOVA_Examples.html)
 | - RCBD ANOVA   | [.html/.qmd](qmd/RCBD_Examples.html)
 | - LSD Examples   | [.html/.qmd](qmd/LSD_Examples.html)
-| - LSD + GLSD    | [.html/.qmd](rcodes/.html)
+| - GLSD Examples   | [.html/.qmd](qmd/GLSD_Examples.html)
 | - Two Factorial Design | [.html/.qmd](rcodes/.html)
