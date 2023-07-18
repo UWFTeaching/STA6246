@@ -1,6 +1,6 @@
 ---
-title: "STA6246 - DOE"
-subtitle: "LSD - ANOVA Examples"
+title: "Latin Square Design"
+subtitle: "STA6246 - DOE"
 author: "Dr. Cohen "
 format: html
 editor: visual
