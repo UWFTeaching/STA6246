@@ -13,28 +13,55 @@ toc: true
 
 ## Introduction
 
-These designs are known as randomized incomplete block designs:
-
 -   In certain experiments using randomized block designs, we may not be able to run all the treatment combinations in each block.
+
 -   Situations like this usually occur because of shortages of experimental apparatus or facilities or the physical size of the block.
--   For example, in the vascular graft experiment (Example 4.1), suppose that each batch of material is only large enough to accommodate testing three extrusion pressures. Therefore, each pressure cannot be tested in each batch.
+
+-   For example, in the **vascular graft experiment**, suppose that each batch of material is only large enough to accommodate testing three extrusion pressures. Therefore, each pressure cannot be tested in each batch.
+
 -   **When all treatment comparisons are equally important,** the treatment combinations used in each block should be selected in a balanced manner, so that any pair of treatments occur together the same number of times as any other pair. This is a balanced incomplete block design (BIBD).
 
 ## Reaction Time with 4 Catalysts
 
--   An experimenter wanted to study the effects of 5 different formulations of a rocket propellant on the observed **burning rate**.
+|        | Catalyst1 | Catalyst2 | Catalyst3 | Catalyst4 |
+|--------|-----------|-----------|-----------|-----------|
+| Batch1 | 73        | NA        | 73        | 75        |
+| Batch2 | 74        | 75        | 75        | NA        |
+| Batch3 | NA        | 67        | 68        | 72        |
+| Batch4 | 74        | 72        | NA        | 75        |
 
--   Each formulation is mixed from a **batch** of raw material.
+-   An experimenter wanted to study the chemical **reaction time** of with 4 **catalysts**.
 
--   Each formulation is prepared by one **operator** for each batch.
+-   Each formulation is mixed from a **batch** of raw material that only enough for 3 reaction.
 
--   Each formulation ca be assembly tested using 5 different **tests**.
+-   We cannot "afford" to do a complete design.
 
--   $p=5$ levels for each factor
+How can we generate a BIBD, let's use the function below:
 
-$p^2= 25$ runs or observations.
+```{r}
+library(multcomp)
+# 4 is the number of treatments (catalysts)
+# 3 is the number of experimental unit per block
+# 4 choose 3 will be the number of blocks
+combn(x=4,m=3)
+```
 
-### Data description
+Every column is a block. This is called **unreduced** **BIBD.** Now, in practice we can offer to do all blocks.
+
+```{r}
+library(ibd)
+des.bibd <- bibd(v = 6, b = 10, r = 5, k = 3, lambda = 2) 
+## arguments of function bibd are:
+## - v: number of treatments
+## - b: number of blocks
+## - r: number of replicates (across all blocks)
+## - k: number of experimental units per block
+## - lambda: lambda
+
+des.bibd$design ## here, blocks are given by *rows*
+```
+
+### Data
 
 ```{r}
 library(tidyverse)
@@ -45,11 +72,9 @@ TimeR=c(73,74,NA,71,NA,75,67,72,73,75,68,NA,75,NA,72,75)
 Catalyst= gl(n = 4,k=4,labels = c(1:4))
 Batch= gl(n = 4,k=1,length = 16,c(1:4))
 
-mydata <- data.frame(TimeR, Catalyst, Batch)
+mydata = tibble(TimeR, Catalyst, Batch)
 
-m=mydata[complete.cases(mydata), ]
-summary(aov(TimeR ~ Batch+Catalyst, data = mydata))
-
+TimeR_result = aov(TimeR ~ Batch+ Catalyst, data = mydata)
 
 library(ibd)
 
@@ -66,6 +91,8 @@ library(crossdes)
 tab <- xtabs(TimeR~ Catalyst+Batch, data = mydata)
 d <- t(apply(tab,1, function(x) (1:4)[x != 0]))
 isGYD(d)
+
+
 
 aov.ibd(TimeR ~ Batch+Catalyst, data = mydata)
 

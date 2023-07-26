@@ -21,9 +21,9 @@ show_sidebar: false
 |      | TH    | Latin Square Design  |[R Code](qmd/LSD_Examples.html) |
 | 5    | T     | GLSD + BIBD Square Design | | 
 |      |TH     | Practice GLSD Square Design |  | 
-| 6    | T     | Two Factorial Design | |
-|      | TH    | Fractionl Factorial Design  |  | 
-| 7    | T     | Multiple Factorial Design | |
+| 6    | T     | Factorial Design | |
+|      | TH    | $2^k$ Factorial Design  |  | 
+| 7    | T     | Fractionl Factorial Design | |
 |      | TH    | Final Project | |
-| 8    | T     | -- |  |
+| 8    | T     | Final Project |  |
 |      | TH    |  |  |
