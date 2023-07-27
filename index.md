@@ -19,11 +19,11 @@ show_sidebar: false
 |      | TH    | Random Effects ANOVA | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=66) |
 | 4    | T     | Randomized Complete Block Design  | [Slides](https://uwfteaching.github.io/STA6246/STA6246_DOE.pdf#page=77) | 
 |      | TH    | Latin Square Design  |[R Code](qmd/LSD_Examples.html) |
-| 5    | T     | GLSD + BIBD Square Design | | 
+| 5    | T     | GLSD + Square Design | | 
 |      |TH     | Practice GLSD Square Design |  | 
 | 6    | T     | Factorial Design | |
 |      | TH    | $2^k$ Factorial Design  |  | 
-| 7    | T     | Fractionl Factorial Design | |
-|      | TH    | Final Project | |
+| 7    | T     | $2^k$ Factorial Design | |
+|      | TH    | Review  | |
 | 8    | T     | Final Project |  |
 |      | TH    |  |  |

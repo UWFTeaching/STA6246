@@ -16,3 +16,4 @@ show_sidebar: false
 | - LSD Examples   | [.html/.qmd](qmd/LSD_Examples.html)
 | - GLSD Examples   | [.html/.qmd](qmd/GLSD_Examples.html)
 | - Two Factorial Design | [.html/.qmd](qmd/FactorialDesigns_Examples.html)
+| - $2^k$ Factorial Design | [.html/.qmd](qmd/2FD.html)

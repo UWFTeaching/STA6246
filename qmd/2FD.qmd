@@ -1,0 +1,149 @@
+---
+title: "2^k Factorial Designs"
+subtitle: "STA6246"
+author: "Dr. Cohen "
+format: html
+editor: visual
+self-contained: true
+execute: 
+  warning: false
+  message: false
+toc: true
+---
+
+## Catalyst of Chemical Process
+
+-   An experimenter wanted to study the Yield of a chemical process
+
+-   The engineer decides to test 2 reactant concentrations (15 vs 25) and 2 catalysts (1 vs 2).
+
+-   3 replicates were run
+
+### Data description
+
+```{r}
+library(tidyverse)
+library(gtsummary)
+# 2^2 Factorial design
+# 2^2 Data Yield in a chemical process
+
+Y=c(28,36,18,31,25,32,19,30,27,32,23,29)
+A=gl(n=2,k=1,length = 4,labels = c("L","H"))
+B=gl(n=2,k=2,length = 4,labels = c("Lo","Hi"))
+
+# block
+bl=gl(n=3,k=4,length = 12,labels=c(1,2,3))
+# data
+mdata=data.frame(Y,A,B)
+
+# ANOVA
+# EA= 8.33
+# EB = -5
+model1 <- aov(Y ~ A+B, data = mdata)
+summary(model1)
+
+```
+
+### Computing Effects 
+
+Estimate the effects from the regression
+
+#### The contrasts 
+
+```{r}
+getOption('contrasts')
+
+```
+
+#### Orthogonal - effect coding - half-effects
+
+```{r}
+options(contrasts=c("contr.sum","contr.poly"))
+contrasts(A)
+m2=lm(Y ~ A*B, data = mdata)
+coef(m2)
+
+# change reference level
+co=coef(lm(Y ~ relevel(A, ref = "H")*relevel(B, ref = "Hi"),data = mdata))
+
+# Effects
+Eff=2*co[2:4]
+names(Eff) = c("A","B","AB")
+Eff
+```
+
+#### Reference coding -  effects
+
+It works only with no interactions
+
+```{r}
+
+options (contrasts = c("contr.treatment", "contr.poly"))
+contrasts(A)
+
+m3 = lm(Y ~ A+ B ,data=mdata)
+#By default The intercept: overall mean - (EffectA+ EffectB)/2
+# and the regression coefficients are the Effect Estimates
+
+Eff2=coef(m3)[2:3]
+names(Eff2) <- c("A","B") 
+Eff2
+
+# Graphics
+interaction.plot(x.factor = mdata$A, 
+                 trace.factor = mdata$B, 
+                 response = mdata$Y, 
+                 fun = mean, 
+                 type = "b", 
+                 col=c("black" ,"red"),
+                 fixed = T,
+                 pch = c(19,17))
+
+
+
+```
+
+## Etch Rate data
+
+An etch process on a single wafer plasma etching tool. The design factors:
+
+-   The gap between the electrodes (A)
+
+-   The gas flow (B)
+
+-   RF power applied to the cathode. (C)
+
+-   Each factor is run at two levels
+
+-   The design is replicated twice n=2.
+
+```{r}
+Etch=c(550,669,633,642,1037,749,1075,729,604,650,601,635,1052,868,1063,860)
+A=gl(n=2,k=1,length = 16,labels = c("L","H"))
+B=gl(n=2,k=2,length = 16,labels = c("L","H"))
+C=gl(n=2,k=4,length = 16,labels = c("L","H"))
+df=tibble(Etch,A,B,C)
+
+
+model1 <- aov(Etch ~ A*B*C, data = df)
+summary(model1)
+
+
+# Get estimates
+getOption("contrasts")
+options(contrasts=c("contr.sum","contr.poly")) # provide half-effects
+co=coef(lm(Etch ~ relevel(A, ref = "H")*relevel(B, ref = "H")*relevel(C, ref = "H")))
+# Effects
+Eff=2*co[2:8]
+names(Eff) <- c("A","B","C","AB","AC","BC","ABC") 
+Eff
+
+qq=qqnorm(Eff,cex=1,ylim = c(-200,300),xlim=c(-3,1.5))
+qqline(Eff)
+text(qq$x,qq$y,names(Eff),pos=1,cex=1,col="red")
+
+
+
+```
+
+-   The factors A, C, and interactions AC are the most important terms.
