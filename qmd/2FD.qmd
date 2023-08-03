@@ -44,11 +44,11 @@ summary(model1)
 
 ```
 
-### Computing Effects 
+### Computing Effects
 
 Estimate the effects from the regression
 
-#### The contrasts 
+#### The contrasts
 
 ```{r}
 getOption('contrasts')
@@ -72,7 +72,7 @@ names(Eff) = c("A","B","AB")
 Eff
 ```
 
-#### Reference coding -  effects
+#### Reference coding - effects
 
 It works only with no interactions
 
